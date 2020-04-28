@@ -1,0 +1,118 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+
+    <!-- 
+    代码调试方法：用断点不管用，可以在断点语句前面加"Debugger;",在谷歌浏览器里用F12打开"console"调试器，运行html文件，程序就会在debugger处停止，
+    点击step over next function call或step into next function call可继续下一语句的执行。
+    step over next function call:跨过，实际表现是不遇到函数时，执行下一步，遇到函数时，不进入函数直接执行下一步。
+    step into next function call：跨入，实际表现是不遇到函数时，执行下一步，遇到函数时，进入函数执行上下文。
+    
+    在javascript中background-color要变成backgroundColor,因为javascript会把“－”看作是减号。所以style.backgroundColor或者是style['background-color']或者style["background-color"]都是对的。
+   
+    -->
+
+    <style type="text/css">
+        html,body
+        {
+            margin:0;
+            height:100%;
+            width:100%;
+            padding:0;
+             }
+    #div1{
+      
+        border:thin solid red;
+        height:20%;
+        display:-webkit-box;
+        -webkit-box-orient:horizontal;
+        -webkit-box-pack:center;
+        -webkit-box-align:center;
+        
+    }
+        #div2{
+       
+        border:thin solid black;
+        height:30%;
+        width:50%;
+        
+        float:left;
+    }
+        #div3{
+      
+        border:thin solid blue;
+        height:70%;
+        width:49%;
+        float:left;
+    }
+    
+
+    </style>
+    <script type="text/javascript">
+      
+        function changeColor() {
+            document.getElementById("div2").style.backgroundColor = "pink";
+            
+           elementsP = document.getElementsByTagName("p");
+            for (i = 0; i < elementsP.length-1; i++) {
+                elementsP[i].style.color = "red";
+            }
+            elementsP.item(2).style.color = "blue";
+        }
+        function changeImage() {
+        document.getElementById("image").src="http://172.31.85.105:8080/webgis.jpg";
+        }
+        function title(StudyNumber, name) {
+            this.studyNumber = StudyNumber;
+            this.name = name;
+            this.changeColor = changecolor;
+//            debugger;
+            function changecolor(color)
+            {document.getElementById("div1").style.color = color;}
+
+        }
+        
+        var student = new title("1234", "li");
+        function titleUse() {
+
+            
+            document.getElementById("div1").innerHTML = student.studyNumber + " " + student.name;
+
+
+
+        }
+        function changeDivColor() {
+
+            student.changeColor("red");
+        }
+        
+    
+    
+    </script>
+</head>
+<body onload="titleUse()">
+    <div id="div1" onclick="changeDivColor()">
+    <h1>div1</h1>
+    </div>
+    
+    <div id="div2">
+     <h1>div2</h1>
+    <button id="btn" onclick="changeColor()">changecolor</button>
+    <br />
+    <p style="font-size:small">javascript是基于对象的编程语言</p>
+    <p style="font-size:small">javascript是由事件驱动的编程语言</p>
+    <p style="font-size:small">javascript可实现网页内容的实时动态变化</p>
+    </div>
+
+
+     <div id="div3">
+    <h1>div3</h1>
+     <button onclick="changeImage()">changeImage</button>
+     <br />
+     <img id="image" src="webgis.jpg" alt="webgis图标"/>
+    </div>
+
+
+</body>
+</html>
