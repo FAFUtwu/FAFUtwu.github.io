@@ -1,0 +1,111 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <title>Intro to MapView - Create a 2D map - 4.15</title>
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.15/esri/themes/light/main.css"
+    />
+    <script src="https://js.arcgis.com/4.15/"></script>
+
+    <script>
+    	require([
+        "esri/Map",
+        "esri/views/MapView",
+        "esri/layers/FeatureLayer",
+        "esri/layers/TileLayer",
+        "esri/widgets/Legend",
+        "esri/widgets/ScaleBar"
+      ], function (Map, MapView, FeatureLayer, TileLayer, Legend, ScaleBar) {
+      	var flayer = new FeatureLayer({
+      		url:
+            "https://www.arcgisonline.cn/server/rest/services/Hosted/%E7%A6%8F%E5%BB%BA%E5%86%9C%E6%9E%97%E5%A4%A7%E5%AD%A6%E4%BA%8B%E4%BB%B6/FeatureServer"
+      	});
+      	var tiledlayer = new TileLayer({
+      		url:
+            "https://tiles.arcgis.com/tiles/nzS0F0zdNLvs7nc8/arcgis/rest/services/China_PopDens_2020/MapServer"
+      	});
+
+      	var map1 = new Map({
+      		basemap: "topo",
+      		layers: [flayer, tiledlayer]
+      	});
+
+      	var view1 = new MapView({
+      		container: "viewDiv",
+      		map: map1,
+      		zoom: 5,
+      		center: [120, 21] // longitude, latitude
+      	});
+
+      	var legend1 = new Legend({
+      		view: view1,
+      		layerInfos: [
+            {
+            	layer: flayer,
+            	title: "人口密度"
+            }
+          ]
+      	});
+
+      	view1.ui.add(legend1, "bottom-right");
+
+      	var scaleBar1 = new ScaleBar({
+      		view: view1,
+      		style: "ruler",
+      		unit: "non-metric"
+      	});
+
+      	view1.ui.add(scaleBar1, {
+      		position: "bottom-left"
+      	});
+
+      	var coordsWidget = document.createElement("div");
+      	coordsWidget.id = "coordsWidget";
+      	coordsWidget.className = "esri-widget esri-component";
+      	coordsWidget.style.padding = "7px 15px 5px";
+
+      	view1.ui.add(coordsWidget, "bottom-right");
+      	function showCoordinates(pt) {
+      		var coords =
+            "Lat/Lon " +
+            pt.latitude.toFixed(3) +
+            " " +
+            pt.longitude.toFixed(3) +
+            " | Scale 1:" +
+            Math.round(view1.scale * 1) / 1 +
+            " | Zoom " +
+            view1.zoom;
+      		coordsWidget.innerHTML = coords;
+      	}
+      	view1.watch("stationary", function (isStationary) {
+      		showCoordinates(view1.center);
+      	});
+
+      	view1.on("pointer-move", function (evt) {
+      		showCoordinates(view1.toMap({ x: evt.x, y: evt.y }));
+      	});
+      });
+    </script>
+  </head>
+
+  <body>
+    <div id="viewDiv"></div>
+  </body>
+</html>
